@@ -1,5 +1,29 @@
 (() => {
-  let youtubePlayerLeftControlPanel, youtubePlayer, curretVideoId;
+  let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId;
+
+  const getBookmarks = () => {
+    return new Promise((resolve) => {
+      chrome.storage.sync.get([currentVideoId], (result) => {
+        const bookmarks = result[currentVideoId]
+          ? JSON.parse(result[currentVideoId])
+          : [];
+        resolve(bookmarks);
+      });
+    });
+  };
+
+  const addNewBookmark = async () => {
+    const bookmarks = await getBookmarks();
+    const newBookmark = {
+      time: youtubePlayer.currentTime,
+      description: `Bookmark time: ${youtubePlayer.currentTime}`,
+    };
+    const updatedBookmarks = [...bookmarks, newBookmark];
+    updatedBookmarks.sort((a, b) => a.time - b.time);
+    chrome.storage.sync.set({
+      [currentVideoId]: JSON.stringify(updatedBookmarks),
+    });
+  };
 
   const crateNewBookmarkButton = () => {
     const button = document.createElement("button");
@@ -25,7 +49,7 @@
 
     switch (name) {
       case "VIDEO ID UPDATE":
-        curretVideoId = videoId;
+        currentVideoId = videoId;
         render();
         break;
     }
