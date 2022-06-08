@@ -1,14 +1,15 @@
-chrome.tabs.onUpdated.addListener((tabId, tab) => {
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   const url = tab.url;
   const youtubeRegExp =
-    /^(?:https?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:embed\/|v\/|watch\?v=|watch\?.+&v=))((?:\w|-){11})(?:&list=(\S+))?$/;
+    /(?:https?:\/\/)?(?:youtu\.be\/|(?:www\.|m\.)?youtube\.com\/(?:watch|v|embed)(?:\.php)?(?:\?.*v=|\/))([a-zA-Z0-9\_-]+)/;
 
-  if (url && url.match(youtubeRegExp)) {
-    const videoId = youtubeRegExp.exec(url)[1];
-
-    chrome.tabs.sendMessage(tabId, {
-      name: "VIDEO ID UPDATE",
-      videoId,
-    });
+  if (changeInfo.status === "complete" && url) {
+    if (url.match(youtubeRegExp)) {
+      const videoId = youtubeRegExp.exec(url)[1];
+      chrome.tabs.sendMessage(tabId, {
+        name: "VIDEO ID UPDATE",
+        videoId,
+      });
+    }
   }
 });
