@@ -1,1 +1,21 @@
+.gradient {
+  background-image: linear-gradient(to right, #ff9966, #ff5e62);
+}
 
+.icon-button {
+  background-color: transparent;
+  border: none;
+}
+
+.bookmarks-wrapper {
+  max-height: 175px;
+  overflow-y: scroll;
+}
+
+.bookmarks-wrapper::-webkit-scrollbar {
+  width: 0px;
+}
+
+.youtube-icon {
+  color: #f22c13;
+}
