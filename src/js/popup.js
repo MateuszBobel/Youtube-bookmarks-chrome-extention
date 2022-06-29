@@ -67,6 +67,11 @@ document.addEventListener("DOMContentLoaded", async () => {
   const videoId = getVideoId(currentTabUrl);
   if (videoId) {
     const bookmarks = await getBookmarks(videoId);
+    if (!bookmarks.length) {
+      const noBookmarksInfo = document.querySelector(".no-bookmarks-info");
+      noBookmarksInfo.classList.remove("is-hidden");
+      return;
+    }
     displayBookmarks(bookmarks);
   } else {
     const notYoutubePageInfo = document.querySelector(".not-youtube-page-info");
