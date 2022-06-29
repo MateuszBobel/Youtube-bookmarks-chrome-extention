@@ -1,6 +1,6 @@
 {
-  "name": "YT Bookmarks",
-  "description": "Create bookmarks for YouTube vdeos",
+  "name": "YouTube Bookmarks",
+  "description": "Create bookmarks for YouTube videos",
   "version": "1.0.0",
   "manifest_version": 3,
   "background": {
