@@ -1,7 +1,7 @@
 {
   "name": "YouTube Bookmarks",
   "description": "Create bookmarks for YouTube videos",
-  "version": "1.0.0",
+  "version": "0.0.0.1",
   "manifest_version": 3,
   "background": {
     "service_worker": "src/js/background.js"
