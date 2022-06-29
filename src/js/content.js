@@ -1,6 +1,11 @@
 (() => {
   let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId;
 
+  const getTime = (time) => {
+    const date = new Date(0).setSeconds(time).toISOString().slice(11, 19);
+    return date;
+  };
+
   const getBookmarks = () => {
     return new Promise((resolve) => {
       chrome.storage.sync.get([currentVideoId], (result) => {
@@ -16,7 +21,7 @@
     const bookmarks = await getBookmarks();
     const newBookmark = {
       time: youtubePlayer.currentTime,
-      description: `Bookmark time: ${youtubePlayer.currentTime}`,
+      description: `Bookmark time: ${getTime(youtubePlayer.currentTime)}`,
     };
     const updatedBookmarks = [...bookmarks, newBookmark];
     updatedBookmarks.sort((a, b) => a.time - b.time);
