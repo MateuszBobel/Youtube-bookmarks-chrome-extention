@@ -1,5 +1,5 @@
 (() => {
-  let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId;
+  let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId, successBox;
 
   const getTime = (time) => {
     const date = new Date(0);
@@ -30,6 +30,8 @@
     chrome.storage.sync.set({
       [currentVideoId]: JSON.stringify(updatedBookmarks),
     });
+    successBox.classList.remove("success-box-hidden");
+    setTimeout(() => successBox.classList.add("success-box-hidden"), 1500);
   };
 
   const crateNewBookmarkButton = () => {
@@ -49,6 +51,10 @@
     if (newBookmarkButton) return;
     newBookmarkButton = crateNewBookmarkButton();
     youtubePlayerLeftControlPanel.appendChild(newBookmarkButton);
+    successBox = document.createElement("div");
+    successBox.classList.add("success-box", "success-box-hidden");
+    successBox.textContent = "Bookmark added";
+    document.body.appendChild(successBox);
   };
 
   chrome.runtime.onMessage.addListener(

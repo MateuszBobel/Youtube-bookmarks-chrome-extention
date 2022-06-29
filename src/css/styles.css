@@ -19,3 +19,22 @@
 .youtube-icon {
   color: #f22c13;
 }
+
+.success-box {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 10px;
+  padding: 10px;
+  background-image: linear-gradient(to right, #ff9966, #ff5e62);
+  color: #fff;
+  border-radius: 10px;
+  font-size: 1.4rem;
+  z-index: 99999999999;
+  transition: 0.4s;
+}
+
+.success-box-hidden {
+  transform: translate(-50%, -250px);
+}
