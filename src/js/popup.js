@@ -28,6 +28,13 @@ const deleteBookmark = async (time) => {
   });
 };
 
+const copyBookmarkUrl = async (time) => {
+  const currentTabUrl = await getCurrentTabUrl();
+  const videoId = getVideoId(currentTabUrl);
+  const bookmarkUrl = `https://youtu.be/${videoId}?t=${Math.floor(time)}`;
+  navigator.clipboard.writeText(bookmarkUrl);
+};
+
 const creteBookmarkElement = (bookmark) => {
   const bookmarkTemplate = document.querySelector("#bookmark-template");
   const bookmarkElement = bookmarkTemplate.content.cloneNode(true);
@@ -40,6 +47,9 @@ const creteBookmarkElement = (bookmark) => {
   bookmarkElement
     .querySelector(".delete-button")
     .addEventListener("click", () => deleteBookmark(bookmark.time));
+  bookmarkElement
+    .querySelector(".link-button")
+    .addEventListener("click", () => copyBookmarkUrl(bookmark.time));
   return bookmarkElement;
 };
 
