@@ -1,10 +1,45 @@
-import { getCurrentTabUrl, getVideoId, getBookmarks } from "./utilities.js";
+import {
+  getCurrentTabUrl,
+  getVideoId,
+  getBookmarks,
+  getCurrentTabId,
+} from "./utilities.js";
+
+const playBookmark = async (time) => {
+  const currentTabId = await getCurrentTabId();
+  chrome.tabs.sendMessage(currentTabId, {
+    name: "PLAY BOOKMARK",
+    time,
+  });
+};
+
+const deleteBookmark = async (time) => {
+  const currentTabId = await getCurrentTabId();
+  const bookmarkElement = document.getElementById(`ytb-${time}`);
+  const isLastElement = bookmarkElement.parentElement.children.length === 1;
+  bookmarkElement.parentNode.removeChild(bookmarkElement);
+  if (isLastElement) {
+    const notYoutubePageInfo = document.querySelector(".no-bookmarks-info");
+    notYoutubePageInfo.classList.remove("is-hidden");
+  }
+  chrome.tabs.sendMessage(currentTabId, {
+    name: "DELETE BOOKMARK",
+    time,
+  });
+};
 
 const creteBookmarkElement = (bookmark) => {
   const bookmarkTemplate = document.querySelector("#bookmark-template");
   const bookmarkElement = bookmarkTemplate.content.cloneNode(true);
+  bookmarkElement.querySelector(".box").id = `ytb-${bookmark.time}`;
   bookmarkElement.querySelector(".bookmark-descrition").textContent =
     bookmark.description;
+  bookmarkElement
+    .querySelector(".play-button")
+    .addEventListener("click", () => playBookmark(bookmark.time));
+  bookmarkElement
+    .querySelector(".delete-button")
+    .addEventListener("click", () => deleteBookmark(bookmark.time));
   return bookmarkElement;
 };
 
@@ -23,8 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (videoId) {
     const bookmarks = await getBookmarks(videoId);
     displayBookmarks(bookmarks);
-    const notYoutubePageInfo = document.querySelector(".not-youtube-page-info");
   } else {
+    const notYoutubePageInfo = document.querySelector(".not-youtube-page-info");
     notYoutubePageInfo.classList.remove("is-hidden");
   }
 });

@@ -2,8 +2,10 @@
   let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId;
 
   const getTime = (time) => {
-    const date = new Date(0).setSeconds(time).toISOString().slice(11, 19);
-    return date;
+    const date = new Date(0);
+    date.setSeconds(time);
+    const slicedTime = date.toISOString().slice(11, 19);
+    return slicedTime;
   };
 
   const getBookmarks = () => {
@@ -49,15 +51,29 @@
     youtubePlayerLeftControlPanel.appendChild(newBookmarkButton);
   };
 
-  chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    const { name, videoId } = request;
+  chrome.runtime.onMessage.addListener(
+    async (request, sender, sendResponse) => {
+      const { name, videoId, time } = request;
 
-    switch (name) {
-      case "VIDEO ID UPDATE":
-        currentVideoId = videoId;
-        render();
-        break;
+      switch (name) {
+        case "VIDEO ID UPDATE":
+          currentVideoId = videoId;
+          render();
+          break;
+        case "DELETE BOOKMARK":
+          const bookmarks = await getBookmarks();
+          const filteredBookmarks = bookmarks.filter(
+            (bookmark) => bookmark.time != time
+          );
+          chrome.storage.sync.set({
+            [currentVideoId]: JSON.stringify(filteredBookmarks),
+          });
+          break;
+        case "PLAY BOOKMARK":
+          youtubePlayer.currentTime = time;
+          break;
+      }
     }
-    render();
-  });
+  );
+  render();
 })();
