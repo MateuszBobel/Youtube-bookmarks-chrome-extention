@@ -45,8 +45,8 @@
 
   const render = () => {
     youtubePlayerLeftControlPanel =
-      document.querySelector(".ytp-left-controls");
-    youtubePlayer = document.querySelector(".video-stream");
+      document.getElementsByClassName("ytp-left-controls")[0];
+    youtubePlayer = document.getElementsByClassName("video-stream")[0];
     let newBookmarkButton = document.querySelector(".bookmark-button");
     if (newBookmarkButton) return;
     newBookmarkButton = crateNewBookmarkButton();
