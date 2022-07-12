@@ -1,5 +1,9 @@
 (() => {
-  let youtubePlayerLeftControlPanel, youtubePlayer, currentVideoId, successBox;
+  let youtubePlayerLeftControlPanel,
+    bookmarks = [],
+    youtubePlayer,
+    currentVideoId = "",
+    successBox;
 
   const getTime = (time) => {
     const date = new Date(0);
@@ -20,7 +24,6 @@
   };
 
   const addNewBookmark = async () => {
-    const bookmarks = await getBookmarks();
     const newBookmark = {
       time: youtubePlayer.currentTime,
       description: `Bookmark time: ${getTime(youtubePlayer.currentTime)}`,
@@ -43,13 +46,14 @@
     return button;
   };
 
-  const render = () => {
-    youtubePlayerLeftControlPanel =
-      document.getElementsByClassName("ytp-left-controls")[0];
-    youtubePlayer = document.getElementsByClassName("video-stream")[0];
+  const render = async () => {
+    bookmarks = await getBookmarks();
     let newBookmarkButton = document.querySelector(".bookmark-button");
     if (newBookmarkButton) return;
     newBookmarkButton = crateNewBookmarkButton();
+    youtubePlayerLeftControlPanel =
+      document.getElementsByClassName("ytp-left-controls")[0];
+    youtubePlayer = document.getElementsByClassName("video-stream")[0];
     youtubePlayerLeftControlPanel.appendChild(newBookmarkButton);
     successBox = document.createElement("div");
     successBox.classList.add("success-box", "success-box-hidden");
@@ -67,7 +71,6 @@
           render();
           break;
         case "DELETE BOOKMARK":
-          const bookmarks = await getBookmarks();
           const filteredBookmarks = bookmarks.filter(
             (bookmark) => bookmark.time != time
           );
