@@ -31,3 +31,5 @@
 2. Click on the copy url button.
 3. Paste the url from the clipboard.
 
+### Limitations
+Extension doesn't work with the youtube videos embedded on the other pages.
