@@ -13,3 +13,17 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
     }
   }
 });
+
+chrome.runtime.onMessage.addListener(async (request, sender, sendResponse) => {
+  const { name, bookmarksNumber } = JSON.parse(request);
+  if (name === "SET BADGE NUMBER") {
+    let queryOptions = { active: true, lastFocusedWindow: true };
+    const [tab] = await chrome.tabs.query(queryOptions);
+    chrome.action.setBadgeBackgroundColor({ color: "#000" });
+    chrome.action.setBadgeText({
+      tabId: tab.id,
+      text: bookmarksNumber.toString(),
+    });
+    sendResponse();
+  }
+});

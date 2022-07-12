@@ -12,6 +12,15 @@
     return slicedTime;
   };
 
+  const setBookmarksNumberOnBadge = (number) => {
+    chrome.runtime.sendMessage(
+      JSON.stringify({
+        name: "SET BADGE NUMBER",
+        bookmarksNumber: number,
+      })
+    );
+  };
+
   const getBookmarks = () => {
     return new Promise((resolve) => {
       chrome.storage.sync.get([currentVideoId], (result) => {
@@ -33,8 +42,25 @@
     chrome.storage.sync.set({
       [currentVideoId]: JSON.stringify(updatedBookmarks),
     });
+    bookmarks = updatedBookmarks;
     successBox.classList.remove("success-box-hidden");
     setTimeout(() => successBox.classList.add("success-box-hidden"), 1500);
+    setBookmarksNumberOnBadge(updatedBookmarks.length);
+  };
+
+  const deleteBookmark = (currentVideoId, time) => {
+    const filteredBookmarks = bookmarks.filter(
+      (bookmark) => bookmark.time != time
+    );
+    chrome.storage.sync.set({
+      [currentVideoId]: JSON.stringify(filteredBookmarks),
+    });
+    bookmarks = filteredBookmarks;
+    setBookmarksNumberOnBadge(filteredBookmarks.length);
+  };
+
+  const playBookmark = (time) => {
+    youtubePlayer.currentTime = time;
   };
 
   const crateNewBookmarkButton = () => {
@@ -59,6 +85,7 @@
     successBox.classList.add("success-box", "success-box-hidden");
     successBox.textContent = "Bookmark added";
     document.body.appendChild(successBox);
+    setBookmarksNumberOnBadge(bookmarks.length);
   };
 
   chrome.runtime.onMessage.addListener(
@@ -71,18 +98,12 @@
           render();
           break;
         case "DELETE BOOKMARK":
-          const filteredBookmarks = bookmarks.filter(
-            (bookmark) => bookmark.time != time
-          );
-          chrome.storage.sync.set({
-            [currentVideoId]: JSON.stringify(filteredBookmarks),
-          });
+          deleteBookmark(currentVideoId, time);
           break;
         case "PLAY BOOKMARK":
-          youtubePlayer.currentTime = time;
+          playBookmark(time);
           break;
       }
     }
   );
-  render();
 })();
