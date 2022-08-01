@@ -68,7 +68,7 @@
     button.addEventListener("click", addNewBookmark);
     button.textContent = "Bookmark";
     button.classList.add("ytp-button", "bookmark-button");
-    button.style.width = "100%";
+    button.style.width = "58px";
     return button;
   };
 
