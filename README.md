@@ -4,7 +4,7 @@
 
 <h1 align="center">Youtube Bookmarks</h1>
 
-*Youtube Bookmarks is a google chrome extension that create bookmarks for the youtube videos.*
+*Youtube Bookmarks is a google chrome extension that create bookmarks for youtube videos.*
 
 ### Installation Instructions
 1. Download this repo as a [ZIP file from GitHub](https://github.com/MateuszBobel/Youtube-bookmarks-chrome-extension/archive/refs/heads/main.zip).
